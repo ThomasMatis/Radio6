@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aide & Dépannage Auditeurs - Radio 6</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .aide-container {
+            animation: fadeIn 0.6s ease;
+        }
+        .aide-section {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .aide-section h3 {
+            margin-top: 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.5rem;
+        }
+        .aide-section ul {
+            padding-left: 1.2rem;
+            color: var(--text-muted);
+        }
+        .aide-section li {
+            margin-bottom: 0.6rem;
+            line-height: 1.5;
+        }
+        .highlight-text {
+            color: var(--text);
+            font-weight: 500;
+        }
+        .step-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <header>
+            <div class="logo-area">
+                <img src="logo.png" alt="Radio 6" class="header-logo">
+                <div>
+                    <strong class="site-title">RADIO 6</strong><br>
+                    <small class="site-subtitle">Lycée Arcisse de Caumont</small>
+                </div>
+            </div>
+            <nav id="main-nav">
+    <a href="index.html">Accueil</a>
+    <a href="equipe.html">L'Équipe</a>
+    <a href="aide.html">Aide</a>
+    <a href="https://instagram.com/..." target="_blank">Instagram</a>
+</nav>
+        </header>
+
+        <main class="aide-container">
+            <h2 id="ai-main-title" style="text-align: center; margin-bottom: 0.5rem;">Besoin d'aide pour écouter ?</h2>
+            <p id="ai-main-sub" style="text-align: center; color: var(--text-muted); margin-bottom: 2.5rem;">Voici les solutions simples si vous rencontrez une difficulté sur notre espace de rediffusion.</p>
+
+            <section class="aide-section">
+                <h3 id="ai-s1-title">🔇 Le bouton "Écouter" ne lance pas le son</h3>
+                <p id="ai-s1-p">Si vous cliquez sur une émission et que rien ne se passe ou que le compteur reste à 00:00 :</p>
+                <ul id="ai-s1-ul">
+                    <li><span class="step-badge">1</span> <span class="highlight-text" id="ai-s1-l1-h">Volume de l'appareil :</span> <span id="ai-s1-l1-t">Assurez-vous que le commutateur "Silencieux" de votre téléphone n'est pas activé et augmentez le volume multimédia de votre appareil.</span></li>
+                    <li><span class="step-badge">2</span> <span class="highlight-text" id="ai-s1-l2-h">Forcer la lecture :</span> <span id="ai-s1-l2-t">Certains téléphones bloquent le démarrage automatique. Une fois que vous avez cliqué sur une émission, appuyez directement sur le bouton "▶" situé dans la barre audio grise au centre.</span></li>
+                    <li><span class="step-badge">3</span> <span class="highlight-text" id="ai-s1-l3-h">Écouteurs Bluetooth :</span> <span id="ai-s1-l3-t">Vérifiez que le son n'est pas envoyé vers des écouteurs ou une enceinte restés connectés dans votre sac ou une autre pièce.</span></li>
+                </ul>
+            </section>
+
+            <section class="aide-section">
+                <h3 id="ai-s2-title">📱 Je ne vois pas les mêmes émissions sur mon téléphone et sur mon PC</h3>
+                <p id="ai-s2-p">Il est possible que la liste des rediffusions soit différente d'un appareil à un autre :</p>
+                <ul>
+                    <li><span class="highlight-text" id="ai-s2-l1-h">Le fonctionnement du site :</span> <span id="ai-s2-l1-t">Pour stocker des émissions très longues sans coupure, ce site utilise la mémoire propre du navigateur de l'appareil (IndexedDB).</span></li>
+                    <li><span class="highlight-text" id="ai-s2-l2-h">Conséquence :</span> <span id="ai-s2-l2-t">Les fichiers audios restent enregistrés sur l'ordinateur où l'équipe de la radio les a déposés. Si vous changez de PC ou utilisez votre téléphone portable, il est normal de voir une liste différente ou vide.</span></li>
+                </ul>
+            </section>
+
+            <section class="aide-section">
+                <h3 id="ai-s3-title">Playback 🛑 Le son se coupe quand le téléphone se met en veille</h3>
+                <p id="ai-s3-p">Sur certains smartphones, l'écoute peut s'interrompre si l'écran s'éteint :</p>
+                <ul>
+                    <li><span class="step-badge">1</span> <span class="highlight-text" id="ai-s3-l1-h">Laissez l'onglet ouvert :</span> <span id="ai-s3-l1-t">Évitez de fermer complètement le navigateur ou de basculer sur une application lourde (comme un jeu) pendant l'écoute.</span></li>
+                    <li><span class="step-badge">2</span> <span class="highlight-text" id="ai-s3-l2-h">Économiseur de batterie :</span> <span id="ai-s3-l2-t">Si votre téléphone est en mode "Énergie faible", il peut forcer la fermeture du site pour économiser de la batterie. Désactivez-le temporairement pour une écoute fluide.</span></li>
+                </ul>
+            </section>
+
+            <section class="aide-section">
+                <h3 id="ai-s4-title">📥 Je ne trouve pas le bouton pour télécharger le fichier</h3>
+                <ul>
+                    <li><span class="highlight-text" id="ai-s4-l1-h">Écoute exclusive :</span> <span id="ai-s4-l1-t">Pour protéger le travail et les droits des élèves de la radio, le téléchargement direct des fichiers audio est volontairement bloqué et indisponible sur ce site.</span></li>
+                    <li id="ai-s4-l2">Les émissions sont disponibles uniquement en streaming direct (écoute libre et illimitée) via notre barre de lecture.</li>
+                </ul>
+            </section>
+
+            <section class="aide-section" style="border-color: var(--primary); text-align: center;">
+                <h3 id="ai-s5-title">Un bug persiste ? Un fichier semble inaccessible ?</h3>
+                <p id="ai-s5-p">Venez nous le signaler directement au studio de la radio ! En informant l'équipe, nous pourrons remettre le fichier en ligne.</p>
+                <p class="highlight-text" id="ai-s5-loc">📍 Studio ouvert le Lundi et Mardi de 12h40 à 13h25</p>
+            </section>
+
+        </main>
+
+        <footer>
+            <p id="footer-text">© 2026 Radio 6 - Espace de rediffusion du Lycée Arcisse de Caumont, Bayeux.</p>
+        </footer>
+    </div>
+
+    <script src="translate-pages.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Vérification du Thème Visuel
+        const savedTheme = localStorage.getItem('siteTheme') || 'dark';
+        if (savedTheme === 'light') document.body.classList.add('light-mode');
+
+        // 2. Vérification de la TAILLE de la police
+        const savedSize = localStorage.getItem('siteFontSize') || 'medium';
+        document.body.classList.add(`font-${savedSize}`);
+
+        // 3. Vérification du TYPE de police
+        const savedFont = localStorage.getItem('siteFont') || 'normal';
+        if (savedFont === 'dyslexic') document.body.classList.add('font-dyslexic');
+    });
+</script>
+<div id="modal-travaux" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeParamModal('modal-travaux')">&times;</span>
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Zone en travaux</h3>
+        <p class="param-notice">Cette section est en cours de développement.</p>
+    </div>
+</div>
+
+<div id="modal-menu-param" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeParamModal('modal-menu-param')">&times;</span>
+        <h3><i class="fa-solid fa-sliders"></i> Réglages Général</h3>
+        
+        <div class="param-row">
+            <label>Thème Visuel :</label>
+            <select id="param-media">
+                <option value="dark">Mode Sombre</option>
+                <option value="light">Mode Clair</option>
+            </select>
+        </div>
+        <div class="param-row">
+            <label>Taille de la police :</label>
+            <select id="param-taille-police">
+                <option value="small">Petite</option>
+                <option value="medium">Normale</option>
+                <option value="large">Grande</option>
+            </select>
+        </div>
+        <div class="param-row">
+            <label>Type de police :</label>
+            <select id="param-police">
+                <option value="normal">Normale</option>
+                <option value="dyslexic">OpenDyslexic</option>
+            </select>
+        </div>
+    </div>
+</div>
+</body>
+</html>

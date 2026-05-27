@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aide 2.0 - IA Cyber-Intelligente</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .chat-container {
+            max-width: 600px; margin: 2rem auto;
+            background-color: var(--card-bg); border: 1px solid #334155;
+            border-radius: 16px; display: flex; flex-direction: column;
+            height: 620px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            overflow: hidden; animation: fadeIn 0.4s ease;
+        }
+        .chat-header {
+            background-color: #1e1b4b; padding: 1rem;
+            border-bottom: 1px solid #334155; text-align: left;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .chat-header h3 { margin: 0; color: #fff; font-size: 1.1rem; }
+        .chat-header span { color: #a855f7; font-size: 0.85rem; font-weight: bold; }
+        
+        .chat-messages {
+            flex: 1; padding: 1.5rem; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 1.2rem; scrollbar-width: none;
+        }
+        .chat-messages::-webkit-scrollbar { display: none; }
+
+        .message-wrapper { display: flex; align-items: flex-end; gap: 10px; max-width: 85%; }
+        .message-wrapper.bot { align-self: flex-start; }
+        .message-wrapper.user { align-self: flex-end; justify-content: flex-end; margin-left: auto; }
+
+        .bot-avatar {
+            width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+            border: 1px solid #475569; background-color: #0f172a; flex-shrink: 0;
+        }
+
+        .message { padding: 0.8rem 1.2rem; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; text-align: left; }
+        .message-wrapper.bot .message { background-color: #262626; color: var(--text); border-bottom-left-radius: 4px; }
+        .message-wrapper.user .message { background-color: #3797f0; color: white; border-bottom-right-radius: 4px; }
+        
+        .chat-input-area { padding: 1rem; background-color: rgba(15, 23, 42, 0.6); border-top: 1px solid #334155; display: flex; gap: 0.8rem; }
+        .chat-input { flex: 1; background-color: var(--bg-color); border: 1px solid #334155; border-radius: 30px; padding: 0.7rem 1.2rem; color: white; outline: none; font-size: 0.95rem; }
+        .chat-input:focus { border-color: #a855f7; }
+        
+        .btn-send { background-color: #7c3aed; color: white; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div>
+        <header>
+            <div class="logo-area">
+                <img src="logo.png" alt="Radio 6" class="header-logo">
+                <div>
+                    <strong class="site-title">RADIO 6</strong><br>
+                    <small class="site-subtitle">Espace IA Secrète</small>
+                </div>
+            </div>
+            <nav><a href="index.html">← Retour au Panneau Admin</a></nav>
+        </header>
+
+        <main style="text-align: center; padding: 0 1rem;">
+            <h2 style="margin-top: 2rem; margin-bottom: 0.5rem;">🧠 Moteur Cognitif IA v4.0 Ultra-Encyclopédique</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Analyse matricielle étendue : Films, Séries, Chansons, Radios, Médias & Contexte Local</p>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3>💬 @radio_arcisse</h3>
+                    <span>• BASE MACRO-SÉMANTIQUE MAXIMALE 🤖</span>
+                </div>
+                
+                <div class="chat-messages" id="chat-box">
+                    <div class="message-wrapper bot">
+                        <img src="logo.png" alt="Radio 6" class="bot-avatar">
+                        <div class="message">
+                            Système paré à pleine capacité. 🦾 Ma base de données interne intègre désormais une encyclopédie pop-culture complète (Séries, Cinéma, Musique, Radios). <br><br>
+                            Teste mes connaissances dès maintenant ! 🎬📺🎵📻
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="user-input" class="chat-input" placeholder="Pose une question sur une série, un film, une chanson, une radio..." autocomplete="off">
+                    <button id="send-btn" class="btn-send">➤</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        
+        let contextHistory = { lastTheme: null, lastIntent: null };
+
+        // BASE DE DONNÉES ENCYCLOPÉDIQUE MAXIMISÉE
+        const externalData = {
+  "radios_nationales": [
+    {
+      "motsCles": ["skyrock", "rap", "planete rap", "difool", "urbain", "sky", "premier sur le rap"],
+      "reponses": [
+        "📻 <strong>Skyrock :</strong> Radio nationale culte pour le Rap français et le R&B ! Connue pour son émission phare 'Planète Rap' et les nocturnes de Difool. 🔥",
+        "🎙️ Tu parles de Skyrock ? C'est la radio urbaine numéro 1 en France, née de la fin des radios libres dans les années 80."
+      ]
+    },
+    {
+      "motsCles": ["nrj", "hit", "music", "cauet", "manu", "guillaume", "hit music only"],
+      "reponses": [
+        "🎶 <strong>NRJ :</strong> 'Hit Music Only' ! Fondée en 1981 par Jean-Paul Baudecroux, c'est l'une des plus puissantes radios de hits en Europe. ⚡",
+        "📻 NRJ ! Incontournable pour les derniers tubes pop, électro et rap du moment, ainsi que ses matinales survoltées !"
+      ]
+    },
+    {
+      "motsCles": ["fun radio", "bruno", "fun", "electro", "dance", "dj", "le son electrodance"],
+      "reponses": [
+        "🎧 <strong>Fun Radio :</strong> La radio spécialisée dans le son Électro et Dance. Connue pour la matinale de Bruno dans la radio et ses sets de DJ ! 🥳",
+        "🔥 Fun Radio ! C'est le son 'Electro-Dance' par excellence pour ambiancer tes journées."
+      ]
+    },
+    {
+      "motsCles": ["rtlhq", "rtl", "rtl2", "double", "pop", "rock", "groove"],
+      "reponses": [
+        "🎸 <strong>RTL2 :</strong> Le son Pop-Rock ! Une programmation centrée sur les grands classiques du rock et les nouveautés pop. ⚡",
+        "📻 <strong>RTL :</strong> La première radio généraliste privée de France, axée sur l'actualité, les débats et l'information politique."
+      ]
+    },
+    {
+      "motsCles": ["europe", "hanouna", "actu", "clement", "europe 1", "europe 2", "ouifm"],
+      "reponses": [
+        "📻 <strong>Europe 1 / Europe 2 :</strong> Europe 1 is axée sur l'actualité générale, tandis qu'Europe 2 (ancienne Virgin Radio) propose le meilleur du son Pop, Pop-Rock et Nouvelle Scène ! 🎶"
+      ]
+    },
+    {
+      "motsCles": ["nostalgie", "annee 80", "vieux", "classique", "gold", "legende"],
+      "reponses": [
+        "🕺 <strong>Nostalgie :</strong> Les plus grands tubes des années 70, 80 et 90 ! Idéal pour réécouter les légendes de la chanson française et internationale. 📀"
+      ]
+    },
+    {
+      "motsCles": ["rmc", "sport", "moscato", "riolo", "football", "actu sport"],
+      "reponses": [
+        "⚽ <strong>RMC :</strong> Radio majeure axée sur l'actualité talk, l'info en continu et surtout le sport avec des émissions phares comme l'After Foot ou le Moscato Show ! 🎙️"
+      ]
+    },
+    {
+      "motsCles": ["france inter", "inter", "service public", "france info", "culture", "lecomte", "fip", "france culture"],
+      "reponses": [
+        "🏛️ <strong>France Inter :</strong> La première radio généraliste publique de France, mêlant actualité, culture, humour et analyses approfondies. 🎧"
+      ]
+    },
+    {
+      "motsCles": ["rfm", "meilleur de la musique", "night fever", "gold pop"],
+      "reponses": [
+        "🎶 <strong>RFM :</strong> Le meilleur de la musique ! Une station musicale nationale très axée sur les grands classiques des années 80, 90 et les nouveautés pop-variété. 🎧"
+      ]
+    },
+    {
+      "motsCles": ["cherie fm", "romantique", "pop love", "douceur"],
+      "reponses": [
+        "❤️ <strong>Chérie FM :</strong> La radio Pop Love. Idéale pour une ambiance décontractée avec des ballades françaises et internationales incontournables. ✨"
+      ]
+    }
+  ],
+  "histoire_des_medias": [
+    {
+      "motsCles": ["radio libre", "annee 80", "pirate", "monopole", "mitterrand", "fm"],
+      "reponses": [
+        "📻 <strong>Les Radios Libres :</strong> Avant 1981, l'État avait le monopole de la radio. Des stations 'pirates' diffusaient clandestinement jusqu'à la libéralisation de la bande FM par François Mitterrand ! ✊"
+      ]
+    },
+    {
+      "motsCles": ["bande fm", "frequence", "modulation", "am", "ondes", "hertzien"],
+      "reponses": [
+        "📡 <strong>La bande FM (Modulation de Fréquence) :</strong> Elle s'étend de 87.5 à 108 MHz et offre une bien meilleure qualité sonore que les anciennes ondes AM/GO. C'est la base de la radio moderne ! ⚡"
+      ]
+    },
+    {
+      "motsCles": ["podcast", "rediffusion", "audio a la demande", "flux rss", "numerique"],
+      "reponses": [
+        "📲 <strong>Le Podcast :</strong> Apparu au début des années 2000, le podcast (ou audio à la demande) permet d'écouter ses émissions favorites n'importe quand ! 🎧"
+      ]
+    },
+    {
+      "motsCles": ["dab+", "radio numerique", "tnt", "futur de la radio", "haute definition"],
+      "reponses": [
+        "🚀 <strong>Le DAB+ :</strong> C'est le successeur numérique de la bande FM. Il permet d'écouter la radio par les ondes sans grésillement et avec une qualité sonore HD. Le futur est là ! 📡"
+      ]
+    }
+  ],
+  "cinema_sagas": [
+    {
+      "motsCles": ["star wars", "lucas", "jedi", "skywalker", "vador", "sabre", "yoda", "empire", "rebellion", "anakin", "kenobi"],
+      "reponses": [
+        "🌌 <i>'Que la Force soit avec toi !'</i> <strong>Star Wars</strong> est la saga spatiale légendaire créée par George Lucas en 1977. Un monument de la SF ! ⚔️",
+        "🚀 Tu kiffes Star Wars ? Entre le côté obscur et les Jedi, notre studio a choisi le camp des micros bien réglés ! 🎬"
+      ]
+    },
+    {
+      "motsCles": ["harry potter", "poudlard", "sorcier", "voldemort", "griffondor", "hermione", "ron", "magie", "grindelwald", "dumbledore"],
+      "reponses": [
+        "⚡ <i>'Expecto Patronum !'</i> <strong>Harry Potter</strong>, l'univers magique de J.K. Rowling. 8 films cultes qui ont bercé toute une génération de Moldus ! 🪄",
+        "🏰 Bienvenue à Poudlard ! Si l'IA de Radio 6 devait aller dans une maison, ce serait Serdaigle pour son intelligence ! 🦅"
+      ]
+    },
+    {
+      "motsCles": ["seigneur des anneaux", "tolkien", "frodon", "gandalf", "morgoth", "sauron", "precieux", "hobbit", "aragorn", "legolas", "mordor"],
+      "reponses": [
+        "💍 <i>'Un anneau pour les gouverner tous...'</i> Le <strong>Seigneur des Anneaux</strong> de Peter Jackson est la plus grande trilogie d'heroic-fantasy du cinéma ! ⚔️"
+      ]
+    },
+    {
+      "motsCles": ["marvel", "avengers", "iron man", "spiderman", "mcu", "thanos", "thor", "captain america", "hulk", "endgame", "infinity"],
+      "reponses": [
+        "🦸‍♂️ <strong>Le MCU (Marvel Cinematic Universe) :</strong> De Iron Man (2008) à Avengers Endgame, un projet titanesque de films de super-héros connectés ! 💥"
+      ]
+    },
+    {
+      "motsCles": ["avatar", "cameron", "pandora", "jake", "neytiri", "bleu", "navi", "eywa"],
+      "reponses": [
+        "🌿 <strong>Avatar :</strong> Le chef-d'œuvre technologique de James Cameron. Visuellement révolutionnaire, il détient le record du plus grand succès de l'histoire du cinéma ! 🌊"
+      ]
+    },
+    {
+      "motsCles": ["matrix", "neo", "morpheus", "trinity", "reloaded", "architecte", "agent smith", "pilule"],
+      "reponses": [
+        "🕶️ <i>'Bienvenue dans le monde réel.'</i> <strong>Matrix</strong> des sœurs Wachowski (1999) a revolutionized les effets visuels (bullet-time) et la philosophie de la SF au cinéma. 💊"
+      ]
+    },
+    {
+      "motsCles": ["christopher nolan", "interstellar", "inception", "oppenheimer", "tenet", "dunkerque", "memento"],
+      "reponses": [
+        "⏳ <strong>Christopher Nolan :</strong> Le maître du temps et des structures complexes ! Que ce soit l'espace d'Interstellar, les rêves d'Inception ou la physique d'Oppenheimer, ses films retournent le cerveau. 🧠"
+      ]
+    },
+    {
+      "motsCles": ["batman", "dark knight", "joker", "gotham", "bruce wayne"],
+      "reponses": [
+        "🦇 <i>'Pourquoi cet air si sérieux ?'</i> La trilogie The Dark Knight de Nolan, portée par la performance magistrale d'Heath Ledger en Joker, reste le sommet du film de justicier. 🃏"
+      ]
+    },
+    {
+      "motsCles": ["jurassic park", "dinosaure", "t-rex", "spielberg", "raptor", "ambre"],
+      "reponses": [
+        "🦖 <i>'La vie trouve toujours un chemin.'</i> <strong>Jurassic Park</strong> de Steven Spielberg (1993) a marqué l'histoire grâce à ses dinosaures en images de synthèse révolutionnaires ! 🦕"
+      ]
+    },
+    {
+      "motsCles": ["pirates des caraibes", "jack sparrow", "depp", "barbossa", "black pearl", "pirate"],
+      "reponses": [
+        "🏴‍☠️ <i>'Capitaine Jack Sparrow !'</i> Une saga d'aventure mythique portée par les musiques épiques de Hans Zimmer et les péripéties du Black Pearl ! 🌊"
+      ]
+    },
+    {
+      "motsCles": ["retour vers le futur", "marty", "doc", "delorean", "einstein", "mcfly", "convector"],
+      "reponses": [
+        "⚡ <i>'Nom de Zeus !'</i> <strong>Retour vers le futur</strong> est la trilogie ultime sur le voyage dans le temps avec la célèbre voiture DeLorean ! 🚗💨"
+      ]
+    },
+    {
+      "motsCles": ["indiana jones", "spielberg", "fouet", "chapeau", "arche", "perdu", "harrison ford"],
+      "reponses": [
+        "🤠 <strong>Indiana Jones :</strong> L'archéologue le plus célèbre du cinéma. Pièges mortels, reliques sacrées et musiques inoubliables signées John Williams ! 🏛️"
+      ]
+    },
+    {
+      "motsCles": ["fast and furious", "vin diesel", "toretto", "voiture", "course", "tuning", "paul walker"],
+      "reponses": [
+        "🚗 <strong>Fast & Furious :</strong> Commencée comme une simple histoire de courses de rue clandestines, cette franchise est devenue une saga d'action planétaire centrée sur la 'Famille' et les cascades surréalistes ! 💥"
+      ]
+    },
+    {
+      "motsCles": ["mission impossible", "tom cruise", "ethan hunt", "cascade", "espionnage", "impossible"],
+      "reponses": [
+        "💣 <strong>Mission: Impossible :</strong> Une franchise d'action légendaire où Tom Cruise repousse constamment les limites en réalisant ses propres cascades aériennes et sous-marines ! ✈️"
+      ]
+    },
+    {
+      "motsCles": ["die hard", "john mcclane", "bruce willis", "piege de cristal", "gruber"],
+      "reponses": [
+        "🏢 <i>'Yippee-ki-yay, pauvre con !'</i> <strong>Die Hard :</strong> Le film d'action par excellence qui a réinventé le genre, transformant Bruce Willis en un héros ordinaire mais increvable. 💥"
+      ]
+    }
+  ],
+  "series_tv": [
+    {
+      "motsCles": ["stranger things", "eleven", "demogorgon", "hawkins", "vecna", "upside down", "netflix series"],
+      "reponses": [
+        "🚲 <strong>Stranger Things :</strong> La série phénomène de Netflix qui rend un hommage vibrant au cinéma des années 80, entre le Monde à l'Envers, les pouvoirs d'Eleven et le redoutable Vecna ! 🎧"
+      ]
+    },
+    {
+      "motsCles": ["game of thrones", "got", "stark", "lanister", "trone de fer", "jon snow", "daenerys", "dragon"],
+      "reponses": [
+        "⚔️ <i>'Winter is coming.'</i> <strong>Game of Thrones :</strong> La saga de fantasy la plus marquante de l'histoire de la télévision, réputée pour ses complots politiques, ses dragons et ses batailles mémorables ! 🐉"
+      ]
+    },
+    {
+      "motsCles": ["breaking bad", "walter white", "heisenberg", "jesse pinkman", "gus fring", "saul goodman"],
+      "reponses": [
+        "🧪 <i>'I am the one who knocks!'</i> <strong>Breaking Bad :</strong> L'incroyable transformation de Walter White, professeur de chimie devenant le plus grand baron de la drogue d'Albuquerque. Un chef-d'œuvre absolu de tension ! ⚗️"
+      ]
+    },
+    {
+      "motsCles": ["friends", "rachel", "monica", "chandler", "joey", "phoebe", "ross", "central perk"],
+      "reponses": [
+        "☕ <strong>Friends :</strong> La sitcom culte des années 90/2000. Les aventures de cette bande de 6 amis à New York continuent de faire rire les générations successives au Central Perk ! 🛋️"
+      ]
+    },
+    {
+      "motsCles": ["la casa de papel", "professeur", "tokyo", "berlin", "denver", "braquage", "bella ciao"],
+      "reponses": [
+        "🎭 <strong>La Casa de Papel :</strong> Le braquage espagnol le plus célèbre du streaming, mené par le Professeur et ses masques de Dalí au son de 'Bella Ciao' ! 💰"
+      ]
+    },
+    {
+      "motsCles": ["peaky blinders", "tommy shelby", "cillian murphy", "birmingham", "gangster"],
+      "reponses": [
+        "🚬 <i>'By order of the Peaky Blinders!'</i> Une série historique sombre et ultra-stylisée sur le clan Shelby et les gangs de Birmingham après la Première Guerre mondiale. 🥃"
+      ]
+    },
+    {
+      "motsCles": ["squid game", "coree", "jeu", "gi hun", "poupee", "survie"],
+      "reponses": [
+        "🔴 <strong>Squid Game :</strong> La série coréenne dystopique qui a brisé tous les records mondiaux de Netflix. Un jeu de survie impitoyable basé sur des jeux d'enfants traditionnels ! 🔺"
+      ]
+    },
+    {
+      "motsCles": ["sherlock", "benedict", "cumberbatch", "watson", "londres", "enquete"],
+      "reponses": [
+        "🕵️‍♂️ <strong>Sherlock :</strong> Une adaptation moderne magistrale des enquêtes de Conan Doyle portée par Benedict Cumberbatch et Martin Freeman ! Un chef-d'œuvre de déduction. 🇬🇧"
+      ]
+    },
+    {
+      "motsCles": ["the crown", "reine", "elizabeth", "angleterre", "royaume uni", "monarchie"],
+      "reponses": [
+        "👑 <strong>The Crown :</strong> La grande saga historique de Netflix qui retrace la vie de la reine Elizabeth II et les coulisses politiques du Royaume-Uni. Splendide et captivant ! 🇬🇧"
+      ]
+    },
+    {
+      "motsCles": ["the last of us", "joel", "ellie", "pedro pascal", "cliqueur", "champignon", "ps5"],
+      "reponses": [
+        "🌿 <strong>The Last of Us :</strong> L'adaptation acclamée du célèbre jeu vidéo. Une aventure post-apocalyptique bouleversante et ultra-fidèle centrée sur la relation entre Joel et Ellie. 🎮"
+      ]
+    }
+  ],
+  "cinema_genres": [
+    {
+      "motsCles": ["horreur", "peur", "scream", "conjuring", "exorciste", "flipper", "angoisse", "sang", "epouvante", "halloween", "shining"],
+      "reponses": [
+        "😱 <strong>Cinéma d'horreur :</strong> De 'Shining' à 'Smile' en passant par 'Scream' ou 'Conjuring', ce genre adore jouer avec nos phobies et faire grimper le rythme cardiaque ! 🩸"
+      ]
+    },
+    {
+      "motsCles": ["science fiction", "sf", "futur", "robot", "espace", "alien", "blade runner", "dune", "interstellar"],
+      "reponses": [
+        "🚀 <strong>La Science-Fiction :</strong> Des déserts d'Arrakis dans Dune aux androïdes de Blade Runner ou aux voyages temporels d'Interstellar, la SF explore les limites de l'univers ! 🌌"
+      ]
+    },
+    {
+      "motsCles": ["manga", "anime", "ghibli", "miyazaki", "naruto", "one piece", "totoro", "chihiro", "otaku", "demon slayer", "attack on titan"],
+      "reponses": [
+        "🌸 <strong>Animation Japonaise :</strong> Des chefs-d'œuvre poétiques du Studio Ghibli (Le Voyage de Chihiro) aux shonens légendaires comme Naruto, One Piece ou L'Attaque des Titans ! ⛩️"
+      ]
+    }
+  ],
+  "musique_chansons": [
+    {
+      "motsCles": ["bohemian rhapsody", "queen", "mercury", "rock", "opera"],
+      "reponses": [
+        "👑 <strong>Bohemian Rhapsody (Queen - 1975) :</strong> Un chef-d'œuvre absolu de plus de 6 minutes mêlant rock, opéra et ballade, entièrement écrit par Freddie Mercury ! 🎸"
+      ]
+    },
+    {
+      "motsCles": ["thriller", "michael jackson", "pop", "zombie", "king of pop", "billie jean"],
+      "reponses": [
+        "🧟‍♂️ <strong>Thriller (Michael Jackson - 1982) :</strong> Le morceau phare de l'album le plus vendu de tous les temps, accompagné d'un clip vidéo légendaire qui a révolutionné les formats ! 🕺"
+      ]
+    },
+    {
+      "motsCles": ["smells like teen spirit", "nirvana", "cobain", "grunge", "rock alternatif"],
+      "reponses": [
+        "🎸 <strong>Smells Like Teen Spirit (Nirvana - 1991) :</strong> L'hymne de la génération X écrit par Kurt Cobain. Ce titre a propulsé le mouvement Grunge sur le devant de la scène mondiale ! ⚡"
+      ]
+    },
+    {
+      "motsCles": ["blinding lights", "the weeknd", "synthwave", "hits", "pop moderne"],
+      "reponses": [
+        "🌌 <strong>Blinding Lights (The Weeknd - 2019) :</strong> Un morceau aux accents rétro Synthwave qui a brisé tous les records mondiaux de streaming et de longévité dans les charts ! 🎵"
+      ]
+    },
+    {
+      "motsCles": ["shape of you", "ed sheeran", "pop", "guitare", "radio hit"],
+      "reponses": [
+        "🎸 <strong>Shape of You (Ed Sheeran - 2017) :</strong> Un hit planétaire incontournable, ultra-diffusé sur toutes les stations musicales et cumulant des milliards d'écoutes ! 🎧"
+      ]
+    },
+    {
+      "motsCles": ["lose yourself", "eminem", "rap us", "8 mile", "oscar"],
+      "reponses": [
+        "🎤 <strong>Lose Yourself (Eminem - 2002) :</strong> Tiré du film '8 Mile', ce morceau légendaire est le premier titre de rap de l'histoire à avoir remporté un Oscar ! 🔥"
+      ]
+    },
+    {
+      "motsCles": ["get lucky", "daft punk", "pharrell", "electro", "funk"],
+      "reponses": [
+        "🤖 <strong>Get Lucky (Daft Punk ft. Pharrell Williams - 2013) :</strong> Le retour fracassant des robots français avec une ligne de basse funk addictive et un succès planétaire immédiat ! 🎸"
+      ]
+    },
+    {
+      "motsCles": ["stayin alive", "bee gees", "disco", "annee 70"],
+      "reponses": [
+        "🕺 <strong>Stayin' Alive (Bee Gees - 1977) :</strong> Le monument de la musique Disco issu de la bande originale du film 'La Fièvre du samedi soir' ! 🪩"
+      ]
+    },
+    {
+      "motsCles": ["imagine", "john lennon", "beatles", "paix", "piano"],
+      "reponses": [
+        "🕊️ <strong>Imagine (John Lennon - 1971) :</strong> L'hymne universel de la paix mondiale. Une ballade au piano intemporelle devenue l'une des compositions les plus célèbres de l'histoire. 🎹"
+      ]
+    },
+    {
+      "motsCles": ["hotel california", "eagles", "solo guitare", "rock californien"],
+      "reponses": [
+        "🎸 <strong>Hotel California (Eagles - 1976) :</strong> Un morceau légendaire du rock américain, célèbre pour son atmosphère mystérieuse et son double solo de guitare final absolutely mythique ! 🦅"
+      ]
+    }
+  ],
+  "pop_culture": [
+    {
+      "motsCles": ["gaming", "jeu video", "playstation", "xbox", "nintendo", "gta", "fortnite", "minecraft", "console", "zelda", "mario"],
+      "reponses": [
+        "🎮 <strong>Gaming :</strong> De la NES aux franchises colossales comme GTA, Zelda, Minecraft ou Fortnite, le jeu vidéo s'impose aujourd'hui comme le premier divertissement culturel mondial ! 🕹️"
+      ]
+    },
+    {
+      "motsCles": ["netflix", "streaming", "serie", "disney", "prime", "hbo", "binge watching", "crunchyroll"],
+      "reponses": [
+        "📺 Les plateformes de streaming ont transformé notre manière de consommer les récits : le 'binge-watching' permet d'enchaîner des saisons entières en un week-end ! 🍿"
+      ]
+    },
+    {
+      "motsCles": ["prison break", "scofield", "lincoln", "fox river", "evasion"],
+      "reponses": [
+        "🧱 <strong>Prison Break :</strong> L'histoire d'ingéniosité absolue de Michael Scofield, qui se fait incarcérer exprès pour faire évader son frère de la prison de Fox River ! 🏃‍♂️"
+      ]
+    },
+    {
+      "motsCles": ["the last of us", "joel", "ellie", "pedro pascal", "champignon", "cliqueur"],
+      "reponses": [
+        "🌿 <strong>The Last of Us :</strong> L'adaptation magistrale du jeu vidéo par HBO. Une aventure humaine et post-apocalyptique bouleversante au milieu d'une pandémie de Cordyceps. 🎮"
+      ]
+    },
+    {
+      "motsCles": ["sherlock", "cumberbatch", "watson", "londres", "221b"],
+      "reponses": [
+        "🕵️‍♂️ <strong>Sherlock :</strong> Une relecture moderne et brillante des enquêtes de Conan Doyle dans le Londres d'aujourd'hui, portée par Benedict Cumberbatch. Élementaire ! 🇬🇧"
+      ]
+    }
+  ],
+  "nouveaux_films": [
+    {
+      "motsCles": ["interstellar", "cooper", "murph", "trou noir", "gargantua", "zimmer"],
+      "reponses": [
+        "🌌 <strong>Interstellar :</strong> Le chef-d'œuvre spatial de Christopher Nolan. Une quête désespérée pour sauver l'humanité à travers un trou de ver, sublimée par la musique d'orgue de Hans Zimmer. ⏳"
+      ]
+    },
+    {
+      "motsCles": ["mission impossible", "tom cruise", "ethan hunt", "cascade", "espion"],
+      "reponses": [
+        "💣 <strong>Mission: Impossible :</strong> La saga d'action par excellence où Tom Cruise repousse les limites du cinéma en réalisant lui-même des cascades réelles et complètement folles ! ✈?"
+      ]
+    },
+    {
+      "motsCles": ["gladiator", "maximus", "russel crowe", "rome", "arene"],
+      "reponses": [
+        "⚔️ <i>'Force et honneur !'</i> <strong>Gladiator :</strong> Le péplum légendaire de Ridley Scott qui retrace le destin tragique et héroïque du général Maximus devenu esclave puis gladiateur. 🏛️"
+      ]
+    }
+  ],
+  "nouvelles_chansons": [
+    {
+      "motsCles": ["imagine", "john lennon", "beatles", "paix"],
+      "reponses": [
+        "🕊️ <strong>Imagine (John Lennon) :</strong> Sortie en 1971, cette ballade utopique au piano est devenue l'hymne universel de la paix et l'une des chansons les plus célèbres au monde. 🎹"
+      ]
+    },
+    {
+      "motsCles": ["hotel california", "eagles", "guitare"],
+      "reponses": [
+        "🎸 <strong>Hotel California (Eagles) :</strong> Un classique indémodable du rock des années 70, célèbre pour son ambiance mystique et son double solo de guitare final légendaire ! 🦅"
+      ]
+    },
+    {
+      "motsCles": ["billie jean", "michael jackson", "moonwalk"],
+      "reponses": [
+        "🕺 <strong>Billie Jean (Michael Jackson) :</strong> Le morceau historique qui a propulsé l'album Thriller dans la légende, et sur lequel le King of Pop a exécuté son tout premier Moonwalk en public ! ⚡"
+      ]
+    },
+    {
+      "motsCles": ["seigneur des anneaux", "frodon", "gandalf", "aragorn", "sauron", "precieux"],
+      "reponses": [
+        "💍 <strong>Le Seigneur des Anneaux :</strong> La trilogie d'heroic-fantasy absolue de Peter Jackson. Une aventure monumentale en Terre du Milieu pour détruire l'Anneau Unique ! ⚔️"
+      ]
+    },
+    {
+      "motsCles": ["retour vers le futur", "marty", "doc", "delorean", "mcfly", "nom de zeus"],
+      "reponses": [
+        "⚡ <i>'Nom de Zeus !'</i> <strong>Retour vers le Futur :</strong> La trilogie culte de Robert Zemeckis. Des voyages temporels cultes, une DeLorean volante et un convecteur temporel indémodable ! 🚗💨"
+      ]
+    },
+    {
+      "motsCles": ["jurassic park", "dinosaure", "trex", "spielberg", "raptor"],
+      "reponses": [
+        "🦖 <i>'La vie trouve toujours un chemin.'</i> <strong>Jurassic Park :</strong> Le chef-d'œuvre de Steven Spielberg qui a révolutionné les effets spéciaux en redonnant vie aux dinosaures ! 🦕"
+      ]
+    }
+  ],
+  "series_incontournables": [
+    {
+      "motsCles": ["peaky blinders", "tommy shelby", "cillian murphy", "birmingham", "gangster"],
+      "reponses": [
+        "🚬 <i>'By order of the Peaky Blinders!'</i> L'ascension brutale et ultra-stylisée du clan Shelby dans l'Angleterre des années 1920. Une ambiance et une BO incroyables ! 🥃"
+      ]
+    },
+    {
+      "motsCles": ["la casa de papel", "professeur", "tokyo", "braquage", "bella ciao"],
+      "reponses": [
+        "🎭 <strong>La Casa de Papel :</strong> Le casse espagnol le plus célèbre de l'histoire de la TV. Un plan parfait mené par le Professeur au son de Bella Ciao ! 💰"
+      ]
+    },
+    {
+      "motsCles": ["squid game", "coree", "jeu de lahc", "survie"],
+      "reponses": [
+        "🔴 <strong>Squid Game :</strong> La série phénomène coréenne. Un jeu de survie impitoyable et dystopique basé sur des jeux d'enfants traditionnels ! 🔺"
+      ]
+    }
+  ],
+  "nostalgie_animation": [
+    {
+      "motsCles": ["simpson", "homer", "marge", "bart", "springfield"],
+      "reponses": [
+        "🍩 <i>'D'oh !'</i> <strong>Les Simpson :</strong> La série animée la plus longue de l'histoire, parodiant à la perfection le mode de vie de la classe moyenne américaine à Springfield ! 📺"
+      ]
+    },
+    {
+      "motsCles": ["pokemon", "sacha", "pikachu", "dracaufeu", "pokeball"],
+      "reponses": [
+        "⚡ <i>'Attrapez-les tous !'</i> <strong>Pokémon :</strong> L'épopée de Sacha et de son fidèle Pikachu pour devenir le meilleur dresseur de l'univers ! 🎒"
+      ]
+    }
+  ],
+  "legendes_musique": [
+    {
+      "motsCles": ["bohemian rhapsody", "queen", "freddie mercury"],
+      "reponses": [
+        "👑 <strong>Bohemian Rhapsody :</strong> Le chef-d'œuvre opéra-rock de Queen sorti en 1975. Une structure unique sans refrain qui a bouleversé l'histoire de la musique ! 🎸"
+      ]
+    },
+    {
+      "motsCles": ["smells like teen spirit", "nirvana", "kurt cobain", "grunge"],
+      "reponses": [
+        "🎸 <strong>Smells Like Teen Spirit :</strong> L'hymne rageur de Nirvana qui a propulsé le mouvement grunge et le rock alternatif au sommet des charts mondiaux en 1991 ! ⚡"
+      ]
+    }
+  ]
+};
+
+        // Algorithme mathématique de Levenshtein (calcul de similarité textuelle)
+        function getLevenshteinDistance(a, b) {
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+            for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        function isSimilar(word1, word2) {
+            if (word1.includes(word2) || word2.includes(word1)) return true;
+            const distance = getLevenshteinDistance(word1, word2);
+            if (word2.length > 6) return distance <= 2;
+            if (word2.length > 3) return distance <= 1;
+            return distance === 0;
+        }
+
+        function appendMessage(text, sender) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `message-wrapper ${sender}`;
+            if (sender === 'bot') {
+                const avatar = document.createElement('img');
+                avatar.src = 'logo.png';
+                avatar.className = 'bot-avatar';
+                wrapper.appendChild(avatar);
+            }
+            const msg = document.createElement('div');
+            msg.className = 'message';
+            msg.innerHTML = text;
+            wrapper.appendChild(msg);
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleSearch() {
+            const rawQuery = userInput.value.trim();
+            if (!rawQuery) return;
+
+            appendMessage(rawQuery, 'user');
+            userInput.value = "";
+
+            const cleanInput = rawQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const words = cleanInput.split(/\s+|'|,|\.|\?|!|"/).filter(w => w.length > 2);
+
+            setTimeout(() => {
+                let bestResponse = "";
+                let maxScore = 0;
+                let matchedTheme = null;
+
+                // 1. Détection des intentions locales prioritaires (Studio, Horaires, Bugs)
+                const localScoring = {
+                    horaires: { keywords: ['horaire', 'ouvert', 'ferme', 'lundi', 'mardi', 'midi', 'heure', 'quand', 'creneau'], score: 0 },
+                    recrutement: { keywords: ['recrutement', 'recrut', 'rejoindre', 'inscription', 'integrer', 'partie', 'participer', 'micro', '2026', '2027'], score: 0 },
+                    bugsSon: { keywords: ['audio', 'son', 'ecouter', 'bug', 'bloque', 'marche', 'fonctionne', 'coupe', 'veille', 'silencieux', 'muet'], score: 0 },
+                    mai: { keywords: ['mai', 'emission', 'prochaine', 'derniere', '12'], score: 0 },
+                    emplacement: { keywords: ['ou', 'emplacement', 'salle', 'trouve', 'situe', 'endroit', 'lycee', 'caumont', 'bayeux', 'piece', 'studio'], score: 0 }
+                };
+
+                for (let theme in localScoring) {
+                    localScoring[theme].keywords.forEach(keyword => {
+                        words.forEach(word => {
+                            if (isSimilar(word, keyword)) localScoring[theme].score += 2;
+                        });
+                    });
+                    if (localScoring[theme].score > maxScore) {
+                        maxScore = localScoring[theme].score;
+                        matchedTheme = theme;
+                    }
+                }
+
+                if (maxScore >= 2) {
+                    const localDB = {
+                        horaires: [
+                            "🕒 <strong>Horaires du studio :</strong> L'équipe est au taquet chaque <strong>Lundi et Mardi midi de 12h40 à 13h25</strong> ! Passe quand tu veux ! 🎧",
+                            "📅 On t'attend au studio le <strong>Lundi et Mardi de 12h40 à 13h25</strong> pour enregistrer ou juste discuter ! 🎙️"
+                        ],
+                        recrutement: [
+                            "🎙️ <strong>Recrutements :</strong> Les portes sont grandes ouvertes ! Viens réserver ton poste (micro, régie, réseaux) au studio le lundi ou mardi midi ! 🚀🤩",
+                            "🔥 Envie de faire bouger le lycée ? Viens poser ton nom sur la liste de l'équipe un midi ! 📝"
+                        ],
+                        bugsSon: [
+                            "🔇 <strong>Alerte son :</strong> Si le compteur reste figé à 00:00, désactive le bouton silencieux de ton smartphone ou appuie sur le bouton [▶] au milieu de la barre audio grise ! 📲",
+                            "⚠️ C'est un blocage de lecture automatique du navigateur. Clique sur pause puis play [▶] sur le lecteur pour forcer le flux ! 🎧"
+                        ],
+                        mai: [
+                            "🚀 <strong>Émission du 12 mai :</strong> Elle est actuellement sur la table de montage pour l'égalisation audio et arrive très rapidement sur le site ! ⏳🍿",
+                            "⏳ Notre équipe admin s'occupe de téléverser l'enregistrement du <strong>12 mai</strong>, elle arrive d'un instant à l'autre ! 📻"
+                        ],
+                        emplacement: [
+                            "📍 <strong>Géolocalisation :</strong> Le studio officiel de Radio 6 est installé en direct dans les locaux du <strong>Lycée Arcisse de Caumont</strong> ! Passe la porte un midi ! 🏫✨",
+                            "🗺️ Retrouve-nous dans la salle radio du lycée Arcisse de Caumont à Bayeux. Hésite pas à demander le chemin à la vie scolaire ! 🧭"
+                        ]
+                    };
+                    bestResponse = localDB[matchedTheme][Math.floor(Math.random() * localDB[matchedTheme].length)];
+                    contextHistory.lastTheme = matchedTheme;
+                }
+
+                // 2. Scan de la base matricielle interne étendue
+                if (maxScore < 2 && externalData) {
+                    let bestExternalItem = null;
+                    let maxExtScore = 0;
+
+                    for (let category in externalData) {
+                        for (let item of externalData[category]) {
+                            let currentItemScore = 0;
+                            for (let key of item.motsCles) {
+                                words.forEach(word => {
+                                    if (isSimilar(word, key)) {
+                                        currentItemScore += 3;
+                                    }
+                                });
+                            }
+                            if (currentItemScore > maxExtScore) {
+                                maxExtScore = currentItemScore;
+                                bestExternalItem = item;
+                            }
+                        }
+                    }
+
+                    if (maxExtScore >= 3) {
+                        bestResponse = bestExternalItem.reponses[Math.floor(Math.random() * bestExternalItem.reponses.length)];
+                        contextHistory.lastTheme = "external";
+                    }
+                }
+
+                // 3. Gestion analytique du contexte
+                if (!bestResponse && contextHistory.lastTheme) {
+                    if (cleanInput.includes("ou") || cleanInput.includes("trouve") || cleanInput.includes("adresse")) {
+                        bestResponse = "📍 Le studio se situe au cœur du <strong>Lycée Arcisse de Caumont</strong> ! 🏫";
+                    } else if (cleanInput.includes("quand") || cleanInput.includes("heure") || cleanInput.includes("jour")) {
+                        bestResponse = "🕒 Les créneaux d'ouverture sont le <strong>Lundi et Mardi midi de 12h40 à 13h25</strong> ! 📅";
+                    }
+                }
+
+                // 4. Secours si l'IA sèche complètement
+                if (!bestResponse) {
+                    const fallbacks = [
+                        "Désolé, mes banques de données n'ont pas trouvé de correspondance pour cette requête. 🧐 Pose-moi une question sur une série (Stranger Things, Breaking Bad), un film, une chanson (Thriller, Bohemian Rhapsody) ou une radio ! 🎬📺",
+                        "Mon processeur sémantique n'a pas pu valider la question. Donne-moi un mot-clé plus précis (ex: horaires, Friends, Star Wars, Skyrock) ! ⚡🤖"
+                    ];
+                    bestResponse = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                }
+
+                appendMessage(bestResponse, 'bot');
+            }, 300);
+        }
+
+        sendBtn.addEventListener('click', handleSearch);
+        userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
+    </script>
+ <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Vérification du Thème Visuel
+        const savedTheme = localStorage.getItem('siteTheme') || 'dark';
+        if (savedTheme === 'light') document.body.classList.add('light-mode');
+
+        // 2. Vérification de la TAILLE de la police
+        const savedSize = localStorage.getItem('siteFontSize') || 'medium';
+        document.body.classList.add(`font-${savedSize}`);
+
+        // 3. Vérification du TYPE de police
+        const savedFont = localStorage.getItem('siteFont') || 'normal';
+        if (savedFont === 'dyslexic') document.body.classList.add('font-dyslexic');
+    });
+</script>
+<div id="modal-travaux" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeParamModal('modal-travaux')">&times;</span>
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Zone en travaux</h3>
+        <p class="param-notice">Cette section est en cours de développement.</p>
+    </div>
+</div>
+
+<div id="modal-menu-param" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeParamModal('modal-menu-param')">&times;</span>
+        <h3><i class="fa-solid fa-sliders"></i> Réglages Général</h3>
+        
+        <div class="param-row">
+            <label>Thème Visuel :</label>
+            <select id="param-media">
+                <option value="dark">Mode Sombre</option>
+                <option value="light">Mode Clair</option>
+            </select>
+        </div>
+        <div class="param-row">
+            <label>Taille de la police :</label>
+            <select id="param-taille-police">
+                <option value="small">Petite</option>
+                <option value="medium">Normale</option>
+                <option value="large">Grande</option>
+            </select>
+        </div>
+        <div class="param-row">
+            <label>Type de police :</label>
+            <select id="param-police">
+                <option value="normal">Normale</option>
+                <option value="dyslexic">OpenDyslexic</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

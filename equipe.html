@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Équipe - Radio 6</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .equipe-container {
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+        .info-box {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .horaires-badge {
+            display: inline-block;
+            background-color: rgba(37, 99, 235, 0.2);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        .recrutement-card {
+            background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
+            border: 2px dashed var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.15);
+        }
+        .recrutement-card h3 {
+            color: var(--accent);
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        .page-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <header>
+            <div class="logo-area">
+                <img src="logo.png" alt="Radio 6" class="header-logo">
+                <div>
+                    <strong class="site-title">RADIO 6</strong><br>
+                    <small class="site-subtitle">Lycée Arcisse de Caumont</small>
+                </div>
+            </div>
+            <nav id="main-nav">
+    <a href="index.html">Accueil</a>
+    <a href="equipe.html">L'Équipe</a>
+    <a href="aide.html">Aide</a>
+    <a href="https://instagram.com/..." target="_blank">Instagram</a>
+</nav>
+        </header>
+
+        <main class="equipe-container">
+            <img src="logo.png" alt="Logo de l'équipe Radio 6" class="page-logo">
+            
+            <h2 id="eq-title">L'Équipe de Radio 6</h2>
+            <p id="eq-sub" style="color: var(--text-muted); margin-bottom: 2rem;">Découvrez les coulisses de la Radio d'Art 6 du Lycée Arcisse de Caumont à Bayeux.</p>
+
+            <section class="info-box">
+                <h3 id="eq-h3-hours">🕒 Horaires d'Ouverture du Studio</h3>
+                <p id="eq-p-hours">Le club et le studio de la radio vous accueillent chaque semaine aux horaires suivants :</p>
+                <div class="horaires-badge" id="eq-badge">
+                    Lundi et Mardi : 12h40 à 13h25
+                </div>
+                <p id="eq-p-desc" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
+                    Passez nous voir au studio pour découvrir le matériel, assister aux enregistrements ou proposer vos idées d'émissions !
+                </p>
+            </section>
+
+            <section class="recrutement-card">
+                <h3 id="eq-join-title">🎙️ Rejoignez l'aventure pour 2026 / 2027 !</h3>
+                <p id="eq-join-p1">Tu es passionné par le son, l'actualité, la musique, la technique ou l'animation ? Tu as envie de faire entendre ta voix au lycée ?</p>
+                <p id="eq-join-p2">Si tu veux <strong>faire partie de l'équipe officielle de la radio pour la rentrée prochaine (saison 2026/2027)</strong>, n'hésite plus !</p>
+                <p id="eq-join-p3" style="font-weight: bold; color: #fff;">👉 Viens nous rencontrer directement au studio le lundi ou le mardi midi pour voir comment ça se passe et réserver ta place.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p id="footer-text">© 2026 Radio 6 - Espace de rediffusion du Lycée Arcisse de Caumont, Bayeux.</p>
+        </footer>
+    </div>
+
+    <script src="translate-pages.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Vérification du Thème Visuel
+        const savedTheme = localStorage.getItem('siteTheme') || 'dark';
+        if (savedTheme === 'light') document.body.classList.add('light-mode');
+
+        // 2. Vérification de la TAILLE de la police
+        const savedSize = localStorage.getItem('siteFontSize') || 'medium';
+        document.body.classList.add(`font-${savedSize}`);
+
+        // 3. Vérification du TYPE de police
+        const savedFont = localStorage.getItem('siteFont') || 'normal';
+        if (savedFont === 'dyslexic') document.body.classList.add('font-dyslexic');
+    });
+    
+</script>
+<div id="modal-travaux" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeParamModal('modal-travaux')">&times;</span>
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Zone en travaux</h3>
+        <p class="param-notice">Cette section est en cours de développement.</p>
+    </div>
+</div>
+
+<div id="modal-menu-param" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeParamModal('modal-menu-param')">&times;</span>
+        <h3><i class="fa-solid fa-sliders"></i> Réglages Général</h3>
+        
+        <div class="param-row">
+            <label>Thème Visuel :</label>
+            <select id="param-media">
+                <option value="dark">Mode Sombre</option>
+                <option value="light">Mode Clair</option>
+            </select>
+        </div>
+        <div class="param-row">
+            <label>Taille de la police :</label>
+            <select id="param-taille-police">
+                <option value="small">Petite</option>
+                <option value="medium">Normale</option>
+                <option value="large">Grande</option>
+            </select>
+        </div>
+        <div class="param-row">
+            <label>Type de police :</label>
+            <select id="param-police">
+                <option value="normal">Normale</option>
+                <option value="dyslexic">OpenDyslexic</option>
+            </select>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio 6 - La Radio d'Art 6</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Styles pour le bloc des nouveautés (placé en bas) */
+        .updates-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; /* Espace empêchant les blocs de se coller entre eux */
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+        .update-box {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .update-box h4 {
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .update-box.last h4 { color: #34d399; }
+        .update-box.next h4 { color: var(--accent); }
+        .update-box ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .update-box li { margin-bottom: 0.5rem; }
+
+        /* Style spécial pour l'onglet Aide 2.0 dans la navigation */
+        nav a.ia-link {
+            color: #a855f7;
+            font-weight: bold;
+        }
+        nav a.ia-link:hover {
+            color: #c084fc;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen" class="splash-container">
+        <div class="splash-content">
+            <div class="logo-wrapper">
+                <img src="logo.png" alt="Logo Radio 6" class="splash-logo">
+            </div>
+            <h1>RADIO 6</h1>
+            <p class="splash-subtitle">La Radio d'Art 6 • Lycée Arcisse de Caumont</p>
+            <button id="btn-enter" class="btn-splash">Entrer dans l'espace rediffusion</button>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden">
+        <header>
+            <div class="logo-area">
+                <img src="logo.png" alt="Radio 6" class="header-logo">
+                <div>
+                    <strong class="site-title">RADIO 6</strong><br>
+                    <small class="site-subtitle">Lycée Arcisse de Caumont</small>
+                </div>
+            </div>
+            <nav id="main-nav">
+                <button id="btn-login-open" class="btn-nav-login">Connexion</button>
+                <a href="index.html" class="active">Accueil</a>
+                <a href="equipe.html">L'Équipe</a>
+                <a href="aide.html">Aide</a>
+                <a href="https://www.instagram.com/radio_arcisse" target="_blank">Instagram</a>
+                <button id="param-btn" class="btn-nav-param" title="Paramètres"><i class="fa-solid fa-gear"></i></button>
+            </nav>
+        </header>
+
+        <div id="login-modal" class="modal hidden">
+            <div class="modal-content">
+                <span id="btn-login-close" class="close-modal">&times;</span>
+                <h3>Connexion Propriétaire</h3>
+                <p class="login-notice">⚠️ Cet espace est strictly réservé à l'équipe de la radio pour la gestion des fichiers.</p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Identifiant :</label>
+                        <input type="text" id="username" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe :</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <p id="login-error" class="error-msg hidden">Identifiants incorrects.</p>
+                    <button type="submit" class="btn-submit">Se connecter</button>
+                </form>
+            </div>
+        </div>
+
+        <main>
+            <section id="admin-panel" class="admin-card hidden">
+                <h3>🛠️ Panneau de Gestion (Propriétaire)</h3>
+                <p>Ajouter une nouvelle rediffusion (sans limite de taille) :</p>
+                <form id="add-podcast-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="pod-title">Titre de l'émission :</label>
+                        <input type="text" id="pod-title" placeholder="Ex: Émission Spéciale - Foyer" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pod-info">Date ou détails :</label>
+                        <input type="text" id="pod-info" placeholder="Ex: Mai 2026 • Durée : 2h45" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pod-file">Sélectionner le fichier MP3 :</label>
+                        <input type="file" id="pod-file" accept="audio/mp3, audio/mpeg" required>
+                    </div>
+                    <div class="form-group">
+    <label for="pod-category">Catégorie / Dossier :</label>
+    <select id="pod-category" required>
+        <option value="loisir-sport">Loisir & Sport</option>
+        <option value="touristique">Minute Touristique</option>
+        <option value="actualites-infos">Actualités & Infos</option>
+        <option value="culture">Culture</option>
+        <option value="autres" selected>Autres</option>
+    </select>
+</div>
+                    <button type="submit" id="btn-submit-podcast" class="btn-admin-action">Ajouter le podcast</button>
+                </form>
+                <p id="upload-status" style="margin: 1rem 0 0 0; color: var(--accent); font-weight: bold;" class="hidden">Traitement du fichier audio en cours...</p>
+                
+                <button id="btn-logout" class="btn-logout" style="margin-top: 1.5rem;">Se déconnecter</button>
+            </section>
+
+            <section class="player-card">
+                <div class="player-title" id="current-title">🎧 Choisissez une rediffusion ci-dessous</div>
+                <div class="player-status" id="player-status">PRÊT À L'ÉCOUTE</div>
+                <audio id="main-audio-player"></audio>
+                <div class="custom-player-bar">
+                    <button id="custom-play-btn" class="player-btn" disabled>▶</button>
+                    <div class="progress-container">
+                        <span id="current-time" class="time-display">00:00</span>
+                        <div id="progress-bar-bg" class="progress-bar-bg">
+                            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                        </div>
+                        <span id="total-duration" class="time-display">00:00</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="podcast-section">
+    <h2>Liste des Rediffusions</h2>
+    
+    <div class="folder-container">
+        
+        <div class="folder-box" data-category="loisir-sport">
+            <h3><i class="fa-solid fa-basketball"></i> Loisir & Sport <span class="pod-count" id="count-loisir-sport">(0)</span></h3>
+            <div class="podcast-grid hidden" id="grid-loisir-sport"></div>
+        </div>
+
+        <div class="folder-box" data-category="touristique">
+            <h3><i class="fa-solid fa-camera-retro"></i> Minute Touristique <span class="pod-count" id="count-touristique">(0)</span></h3>
+            <div class="podcast-grid hidden" id="grid-touristique"></div>
+        </div>
+
+        <div class="folder-box" data-category="actualites-infos">
+            <h3><i class="fa-solid fa-newspaper"></i> Actualités & Infos <span class="pod-count" id="count-actualites-infos">(0)</span></h3>
+            <div class="podcast-grid hidden" id="grid-actualites-infos"></div>
+        </div>
+
+        <div class="folder-box" data-category="culture">
+            <h3><i class="fa-solid fa-masks-theater"></i> Culture <span class="pod-count" id="count-culture">(0)</span></h3>
+            <div class="podcast-grid hidden" id="grid-culture"></div>
+        </div>
+
+        <div class="folder-box" data-category="autres">
+            <h3><i class="fa-solid fa-folder-open"></i> Autres <span class="pod-count" id="count-autres">(0)</span></h3>
+            <div class="podcast-grid hidden" id="grid-autres"></div>
+        </div>
+
+    </div>
+</section>
+
+            <div class="updates-container">
+                <div class="update-box last">
+                    <h4>✅ Dernière mise à jour</h4>
+                    <ul>
+                        <li>Intégration du bouton <strong>Paramètres <i class="fa-solid fa-gear" style="font-size:0.85rem;"></i></strong> dans la barre de navigation.</li>
+                        <li>Mode déconnecté : Affichage d'une fenêtre alerte <strong>"Zone en travaux"</strong>.</li>
+                    </ul>
+                </div>
+                <div class="update-box next">
+                    <h4>🚀 Prochaine mise à jour</h4>
+                    <ul>
+                        <li>Le bouton <strong>Paramètre</strong> aura une fonctionnalité.</li>
+                        <li>Ajout imminent de l'<strong>émission du 12 mai</strong>.</li>
+                        <li><strong>Rajout possible d'une IA</strong> pour mieux vous aider sur le site.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>© 2026 Radio 6 - Espace de rediffusion du Lycée Arcisse de Caumont, Bayeux.</p>
+        </footer>
+    </div>
+
+    <div id="modal-travaux" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeParamModal('modal-travaux')">&times;</span>
+            <h3 style="color: #f59e0b; font-size: 1.4rem; margin-top: 5px;"><i class="fa-solid fa-triangle-exclamation"></i> Zone en travaux</h3>
+            <p class="param-notice">Cette section est actuellement en cours de développement ou nécessite des privilèges élevés pour être pleinement fonctionnelle.</p>
+            
+            <div class="param-box-update">
+                <h5>Ajout récent :</h5>
+                <p>• Apparition de l'icône de configuration dans le menu principal.</p>
+            </div>
+            
+            <div class="param-box-update future">
+                <h5>Évolution prévue :</h5>
+                <p>• Ce bouton permettra aux visiteurs d'ajuster leurs préférences de lecture.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-menu-param" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeParamModal('modal-menu-param')">&times;</span>
+            <h3 style="color: #2563eb; font-size: 1.4rem; margin-top: 5px;"><i class="fa-solid fa-sliders"></i> Réglages Général</h3>
+            <hr style="border: 0; border-top: 1px solid #334155; margin: 15px 0 20px 0;">
+            
+            <div class="param-row">
+                <label><i class="fa-solid fa-language"></i> Langue :</label>
+                <select id="param-langue">
+                    <option value="fr" selected>Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+
+            <div class="param-row">
+    <label><i class="fa-solid fa-palette"></i> Thème Visuel :</label>
+    <select id="param-media">
+        <option value="dark">Mode Sombre (Par défaut)</option>
+        <option value="light">Mode Clair</option>
+    </select>
+</div>
+
+            <div class="param-row">
+    <label><i class="fa-solid fa-text-height"></i> Taille de la police :</label>
+    <select id="param-taille-police">
+        <option value="small">Petite</option>
+        <option value="medium" selected>Normale</option>
+        <option value="large">Grande</option>
+    </select>
+</div>
+
+<div class="param-row">
+    <label><i class="fa-solid fa-font"></i> Type de police :</label>
+    <select id="param-police">
+        <option value="normal">Normale (Par défaut)</option>
+        <option value="dyslexic">OpenDyslexic</option>
+    </select>
+</div>
+            
+            <button class="btn-submit" style="margin-top: 15px;" onclick="closeParamModal('modal-menu-param')">Enregistrer les réglages</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>

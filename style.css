@@ -1,0 +1,713 @@
+/* ==========================================================================
+   1. VARIABLES DE COULEURS ET THÈME (DESIGN SOMBRE / CLAIR)
+   ========================================================================== */
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --primary: #2563eb;
+    --accent: #f97316;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --danger: #ef4444;
+}
+
+/* Application dynamique du thème clair */
+body.light-theme {
+    --bg-color: #f1f5f9;
+    --card-bg: #ffffff;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --primary: #3b82f6;
+}
+body.light-theme header {
+    border-bottom: 1px solid #cbd5e1;
+}
+body.light-theme .modal-content,
+body.light-theme .player-card,
+body.light-theme .podcast-card,
+body.light-theme .param-row select {
+    border: 1px solid #cbd5e1;
+}
+
+/* ==========================================================================
+   2. STYLES GÉNÉRAUX & CORPS DE PAGE (BARRE DE DÉFILEMENT CACHÉE)
+   ========================================================================== */
+html, body {
+    scrollbar-width: none; /* Cache la barre sur Firefox */
+    -ms-overflow-style: none; /* Cache la barre sur les anciens IE/Edge */
+}
+
+/* Cache la barre sur Chrome, Safari, Opera et le Edge moderne */
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 85px; /* Évite que le header fixe ne masque le début du contenu */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Règles dynamiques pour changer la taille de police globale via le menu */
+body.font-small { font-size: 0.9rem; }
+body.font-medium { font-size: 1rem; }
+body.font-large { font-size: 1.15rem; }
+
+.hidden { 
+    display: none !important; 
+}
+
+/* ==========================================================================
+   3. ÉCRAN D'ACCUEIL / START (SPLASH SCREEN)
+   ========================================================================== */
+.splash-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-content {
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+    animation: fadeInUp 0.8s ease;
+}
+
+.logo-wrapper {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 2rem auto;
+    border-radius: 24px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 10px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(37, 99, 235, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.splash-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+}
+
+.splash-content h1 {
+    font-size: 2.8rem;
+    letter-spacing: 4px;
+    margin: 0 0 0.5rem 0;
+    background: linear-gradient(to right, #ffffff, var(--text-muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.splash-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin: 0 0 2.5rem 0;
+}
+
+.btn-splash {
+    background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.05rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-splash:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+}
+
+.fade-out { 
+    opacity: 0; 
+    transform: scale(1.05); 
+    pointer-events: none; 
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   4. EN-TÊTE & NAVIGATION (HEADER TOUJOURS EN HAUT)
+   ========================================================================== */
+header {
+    position: fixed; /* Reste figé en haut */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000; /* Passe au-dessus du reste */
+    box-sizing: border-box;
+    background-color: var(--card-bg);
+    padding: 0.8rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.site-title {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+.site-subtitle {
+    color: var(--text-muted);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: var(--text);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+nav a:hover, nav a.active {
+    color: var(--accent);
+}
+
+.btn-nav-login {
+    background: transparent;
+    border: 1px solid #334155;
+    color: var(--text);
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-nav-login:hover {
+    background-color: #334155;
+    border-color: var(--text-muted);
+}
+
+/* ==========================================================================
+   ENCAPSULATION DU CONTENU PRINCIPAL (CARRÉS RÉTRÉCIS ET CENTRÉS)
+   ========================================================================== */
+main {
+    max-width: 1200px;      /* Largeur maximale de la zone de contenu */
+    width: 100%;
+    margin: 0 auto;         /* Centre automatiquement toute la page */
+    padding: 2rem;          /* Évite que les éléments collent aux bords gauche/droite */
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   5. MODAL DE CONNEXION POP-UP
+   ========================================================================== */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 10000;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    width: 90%; max-width: 400px;
+    position: relative;
+    border: 1px solid #334155;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.close-modal {
+    position: absolute; top: 15px; right: 20px;
+    font-size: 1.6rem; cursor: pointer; color: var(--text-muted);
+}
+.close-modal:hover { color: var(--text); }
+
+.login-notice {
+    background-color: rgba(249, 115, 22, 0.1);
+    border-left: 3px solid var(--accent);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 0.6rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.form-group { margin-bottom: 1.2rem; text-align: left; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+
+.form-group input[type="text"], 
+.form-group input[type="password"] {
+    width: 100%; padding: 0.7rem; background-color: var(--bg-color);
+    border: 1px solid #334155; border-radius: 6px; color: var(--text); box-sizing: border-box;
+}
+.form-group input:focus { outline: none; border-color: var(--primary); }
+
+.btn-submit {
+    width: 100%; background-color: var(--primary); color: white;
+    border: none; padding: 0.8rem; border-radius: 6px; font-weight: bold; cursor: pointer;
+}
+.error-msg { color: var(--danger); font-size: 0.85rem; margin-bottom: 0.5rem; }
+
+/* ==========================================================================
+   6. ZONE D'ADMINISTRATION (CARRÉ UNIQUE RÉTRÉCI)
+   ========================================================================== */
+.admin-card {
+    background-color: #1e1b4b;
+    border: 1px dashed var(--primary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem; /* Espace pour ne pas coller le carré suivant */
+    text-align: left;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.admin-card h3 { margin-top: 0; color: #fff; font-size: 1.3rem; }
+.admin-form { display: flex; flex-direction: column; gap: 1.2rem; }
+.admin-form .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+input[type="file"] {
+    background-color: var(--bg-color);
+    border: 2px dashed #334155;
+    padding: 1rem;
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+input[type="file"]:hover { border-color: var(--primary); color: var(--text); }
+
+.btn-admin-action {
+    background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+    border: none; color: white; padding: 0.8rem 1.5rem; border-radius: 6px;
+    cursor: pointer; font-weight: bold; font-size: 1rem; transition: transform 0.1s, box-shadow 0.2s;
+    align-self: flex-start;
+}
+.btn-admin-action:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+.btn-admin-action:disabled { background: #334155; color: var(--text-muted); cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-logout {
+    background-color: transparent; color: var(--danger); border: 1px solid var(--danger);
+    padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s;
+}
+.btn-logout:hover { background-color: var(--danger); color: white; }
+
+/* ==========================================================================
+   7. LECTEUR AUDIO PRINCIPAL (CARRÉ UNIQUE RÉTRÉCI)
+   ========================================================================== */
+.player-card {
+    background-color: var(--card-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2.5rem; /* Espace avec la section du dessous */
+    border: 1px solid #334155;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.player-title { font-size: 1.3rem; margin-bottom: 0.5rem; font-weight: 600; }
+.player-status { color: var(--text-muted); font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 1.5rem; }
+.playing { color: var(--accent) !important; }
+
+.custom-player-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background-color: var(--bg-color);
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    max-width: 550px;
+    margin: 0 auto;
+    border: 1px solid #334155;
+}
+
+.player-btn {
+    background-color: var(--primary); color: white; border: none;
+    width: 45px; height: 45px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: transform 0.2s, background-color 0.2s; flex-shrink: 0;
+}
+.player-btn:hover:not(:disabled) { transform: scale(1.05); background-color: #1d4ed8; }
+.player-btn:disabled { background-color: #334155; color: var(--text-muted); cursor: not-allowed; }
+
+.progress-container { display: flex; align-items: center; gap: 0.8rem; width: 100%; }
+.time-display { font-size: 0.85rem; color: var(--text-muted); font-variant-numeric: tabular-nums; min-width: 38px; }
+.progress-bar-bg { flex: 1; height: 6px; background-color: #334155; border-radius: 3px; cursor: pointer; position: relative; }
+.progress-bar-fill { height: 100%; width: 0%; background-color: var(--accent); border-radius: 3px; transition: width 0.1s linear; }
+
+/* ==========================================================================
+   8. LISTE DES REDIFFUSIONS & CARTES PODCASTS (CARRÉS INDIVIDUELS ESPACÉS)
+   ========================================================================== */
+.podcast-section h2 { border-left: 4px solid var(--primary); padding-left: 10px; margin-bottom: 1.5rem; }
+.podcast-grid { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; /* Augmentation de l'espace pour éviter que les carrés se touchent */
+}
+
+.podcast-card {
+    background-color: var(--card-bg); border-radius: 0.5rem; padding: 1.2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    border: 1px solid #334155; transition: transform 0.2s, border-color 0.2s, background-color 0.3s ease;
+}
+.podcast-card:hover { transform: translateX(4px); border-color: var(--primary); }
+
+.podcast-actions-wrapper { display: flex; align-items: center; gap: 1rem; }
+.podcast-info h3 { margin: 0 0 0.3rem 0; font-size: 1.1rem; }
+.podcast-info p { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
+
+.btn-play {
+    background-color: #334155; color: var(--text); border: none;
+    padding: 0.6rem 1.2rem; border-radius: 2rem; cursor: pointer; font-weight: bold; transition: background-color 0.2s;
+}
+.btn-play:hover { background-color: var(--primary); }
+
+.btn-delete {
+    background-color: transparent; color: var(--danger); border: 1px solid var(--danger);
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+    font-weight: bold; font-size: 1.1rem; display: none; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.btn-delete:hover { background-color: var(--danger); color: white; }
+
+body.admin-mode .btn-delete { display: flex; }
+
+/* ==========================================================================
+   9. FOOTER
+   ========================================================================== */
+footer { background-color: var(--card-bg); text-align: center; padding: 1.5rem; font-size: 0.9rem; color: var(--text-muted); margin-top: auto; }
+
+/* ==========================================================================
+   10. STYLE DU BOUTON ENGRENAGE PARAMÈTRES
+   ========================================================================== */
+.btn-nav-param {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 1.25rem;
+    cursor: pointer;
+    margin-left: 1.5rem;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s, transform 0.4s ease;
+}
+.btn-nav-param:hover {
+    color: var(--primary);
+    transform: rotate(60deg);
+}
+
+/* ==========================================================================
+   11. STYLE INTERNE DES FENÊTRES MODALES DE RÉGLAGES
+   ========================================================================== */
+.param-notice {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+/* Boîtes de mise à jour (Zone en travaux) */
+.param-box-update {
+    background-color: var(--bg-color);
+    padding: 12px 15px;
+    margin: 12px 0;
+    border-radius: 8px;
+    text-align: left;
+    border-left: 4px solid #f59e0b;
+}
+.param-box-update.future {
+    border-left-color: #2563eb;
+}
+.param-box-update h5 {
+    margin: 0 0 5px 0;
+    font-size: 0.95rem;
+    color: #ffffff;
+}
+.param-box-update p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Lignes de sélection (Vrai menu) */
+.param-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 18px 0;
+    text-align: left;
+}
+.param-row label {
+    font-size: 0.95rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.param-row select {
+    background-color: var(--bg-color);
+    color: #ffffff;
+    border: 1px solid #334155;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    font-size: 0.9rem;
+    min-width: 150px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.param-row select:focus {
+    border-color: var(--primary);
+}
+/* --- COMPATIBILITÉ MULTI-PAGES : THÈME BLEU CLAIR HARMONIEUX --- */
+body.light-mode {
+    background-color: #eef5fc; /* Fond bleu très clair pour tout le site */
+    color: #0f172a;            /* Texte principal bleu nuit/sombre très lisible */
+}
+
+/* Modification des conteneurs (panneaux, cartes, modales) */
+body.light-mode #main-content,
+body.light-mode #admin-panel,
+body.light-mode .podcast-card,
+body.light-mode .modal-content,
+body.light-mode .update-box {
+    background-color: #ffffff !important; /* Fond blanc propre pour les blocs */
+    color: #1e293b !important;
+    border: 1px solid #bae6fd !important; /* Bordure discrète bleu ciel */
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.08) !important;
+}
+
+/* Correction des textes de description et des labels */
+body.light-mode label,
+body.light-mode p,
+body.light-mode span,
+body.light-mode .form-group label {
+    color: #334155 !important; /* Gris-bleu foncé pour être parfaitement visible */
+}
+
+/* Correction des Titres */
+body.light-mode h1, 
+body.light-mode h2, 
+body.light-mode h3, 
+body.light-mode h4,
+body.light-mode h5 {
+    color: #0369a1 !important; /* Bleu azur foncé pour les titres */
+}
+
+/* --- RE-STYLISATION DES CHAMPS DE SAISIE (INPUTS ET SELECTS) --- */
+body.light-mode input[type="text"],
+body.light-mode input[type="password"],
+body.light-mode select,
+body.light-mode textarea {
+    background-color: #f8fafc !important; /* Fond blanc/gris très clair, fini le bleu nuit foncé ! */
+    color: #0f172a !important;            /* Texte tapé en noir/bleu nuit */
+    border: 1px solid #cbd5e1 !important; /* Bordure grise propre */
+}
+
+/* Style spécifique pour le placeholder (le texte indicatif "Ex: Émission...") */
+body.light-mode input::placeholder {
+    color: #94a3b8 !important; /* Gris clair texturé */
+}
+
+/* Zone d'import de fichier MP3 */
+body.light-mode input[type="file"] {
+    background-color: #f0fdf4 !important; /* Vert/bleu très pâle pour le fichier */
+    color: #1e293b !important;
+    border: 1px solid #bbf7d0 !important;
+}
+
+/* --- BARRE DE NAVIGATION MULTI-PAGES --- */
+body.light-mode header,
+body.light-mode #main-nav {
+    background-color: #0c4a6e !important; /* On garde la barre foncée d'origine pour le contraste... */
+}
+
+/* --- 1. GESTION DES TAILLES DE POLICE --- */
+body.font-small { font-size: 14px !important; }
+body.font-medium { font-size: 16px !important; }
+body.font-large { font-size: 20px !important; }
+
+/* --- 2. GESTION DU TYPE DE POLICE (ACCESSIBILITÉ) --- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap');
+
+body.font-dyslexic {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+}
+
+/* Espacement amélioré spécifique pour le mode dyslexique */
+body.font-dyslexic p, 
+body.font-dyslexic span, 
+body.font-dyslexic label, 
+body.font-dyslexic a, 
+body.font-dyslexic h1, 
+body.font-dyslexic h2, 
+body.font-dyslexic h3 {
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+}
+.folder-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.folder-box {
+    background-color: var(--card-bg, #1e293b);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.folder-box:hover {
+    background-color: #334155;
+}
+
+.folder-box h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+}
+
+.pod-count {
+    font-size: 1rem;
+    color: var(--accent, #34d399);
+    font-weight: bold;
+}
+
+/* On réutilise ta grille actuelle mais avec une marge quand elle s'ouvre */
+.podcast-grid {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #475569;
+}
+/* --- RELOOKING DU PANNEAU DE GESTION --- */
+
+/* Style pour la liste déroulante des Catégories */
+#pod-category {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background-color: #0f172a; /* Fond sombre identique aux inputs */
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #f8fafc; /* Texte blanc/clair */
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    appearance: none; /* Enlève la flèche par défaut pour certains navigateurs */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+}
+
+#pod-category:focus {
+    border-color: #3b82f6; /* Bordure bleue au focus */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Options à l'intérieur de la liste déroulante */
+#pod-category option {
+    background-color: #1e293b;
+    color: #f8fafc;
+    padding: 10px;
+}
+
+/* Style pour la zone de sélection de fichier MP3 */
+#pod-file {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #0f172a;
+    border: 1px dashed #475569; /* Bordure en pointillés plus discrète */
+    border-radius: 8px;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+/* Customisation du bouton interne "Choisir un fichier" */
+#pod-file::-webkit-file-upload-button {
+    background-color: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+#pod-file::-webkit-file-upload-button:hover {
+    background-color: #334155;
+    border-color: #475569;
+}
+
+/* Style pour le bouton "Se déconnecter" rouge discret */
+.btn-logout {
+    background-color: transparent;
+    border: 1px solid #ef4444;
+    color: #fca5a5;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
