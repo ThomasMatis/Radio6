@@ -63,12 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadStatus: "Traitement du fichier audio en cours...",
             btnLogout: "Se déconnecter",
             travauxTitle: "Zone en travaux",
-            travauxNotice: "Cette section est actuellement en cours de développement ou nécessite des privilèges élevés pour être pleinement fonctionnelle.",
+            travauxNotice: "Cette section est actuellement en cours de développement.",
             travauxRecent: "Ajout récent :",
-            travauxRecentTxt: "• Apparition de l'icône de configuration dans le menu principal.",
+            travauxRecentTxt: "• Configuration globale.",
             travauxFuture: "Évolution prévue :",
-            travauxFutureTxt: "• Ce bouton permettra aux visiteurs d'ajuster leurs préférences de lecture.",
-            settingsTitle: "Réglages Général",
+            travauxFutureTxt: "• Nouvelles options.",
+            settingsTitle: "Réglages Généraux",
             settingsLang: "Langue :",
             settingsMedia: "Thème Visuel :",
             settingsMediaDft: "Mode Sombre (Par défaut)",
@@ -79,13 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsFontLg: "Grande",
             settingsSave: "Enregistrer les réglages",
             lastUpdateTitle: "✅ Dernière mise à jour",
-            lastUpdate1: "Intégration du bouton Paramètres dans la barre de navigation.",
-            lastUpdate2: "Mode déconnecté : Affichage d'une fenêtre alerte 'Zone en travaux'.",
+            lastUpdate1: "Le bouton paramètres est accessible à tous le monde.",
+            lastUpdate2: "Le site est maintenant accessible à tous le monde (adapté aux mobiles).",
             lastUpdate3: "Mode connecté : Menu de réglages opérationnel avec modification de la taille de la police.",
             nextUpdateTitle: "🚀 Prochaine mise à jour",
-            nextUpdate1: "Le bouton Paramètre aura une fonctionnalité.",
-            nextUpdate2: "Ajout imminent de l'émission du 12 mai.",
-            nextUpdate3: "Rajout possible d'une IA pour mieux vous aider sur le site."
+            nextUpdate1: "Ajout imminent de l'émission du 12 mai.",
+            nextUpdate2: "Rajout possible d'une IA pour mieux vous aider sur le site.",
+            nextUpdate3: "Plus d'options de personnalisation visuelle."
         },
         en: {
             splashBtn: "Enter the replay area",
@@ -110,11 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadStatus: "Processing audio file...",
             btnLogout: "Log out",
             travauxTitle: "Under Construction",
-            travauxNotice: "This section is currently under development or requires elevated privileges to be fully functional.",
+            travauxNotice: "This section is currently under development.",
             travauxRecent: "Recent update:",
-            travauxRecentTxt: "• Settings icon added to the main menu.",
+            travauxRecentTxt: "• Global configuration.",
             travauxFuture: "Planned evolution:",
-            travauxFutureTxt: "• This button will allow visitors to adjust their playback preferences.",
+            travauxFutureTxt: "• New options.",
             settingsTitle: "General Settings",
             settingsLang: "Language:",
             settingsMedia: "Visual Theme:",
@@ -126,13 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsFontLg: "Large",
             settingsSave: "Save settings",
             lastUpdateTitle: "✅ Last update",
-            lastUpdate1: "Integration of the Settings button in the navigation bar.",
-            lastUpdate2: "Offline mode: display of a 'Under Construction' alert window.",
+            lastUpdate1: "The settings button is accessible to everyone.",
+            lastUpdate2: "The website is now accessible to everyone (mobile friendly).",
             lastUpdate3: "Connected mode: Operational settings menu with font size adjustment.",
             nextUpdateTitle: "🚀 Next update",
-            nextUpdate1: "The Settings button will have a functionality.",
-            nextUpdate2: "Imminent addition of the May 12th show.",
-            nextUpdate3: "Possible addition of an AI to better assist you on the site."
+            nextUpdate1: "Imminent addition of the May 12th show.",
+            nextUpdate2: "Possible addition of an AI to better assist you on the site.",
+            nextUpdate3: "More visual customization options."
         },
         es: {
             splashBtn: "Entrar en el espacio de retransmisión",
@@ -157,11 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadStatus: "Procesando archivo de audio...",
             btnLogout: "Cerrar sesión",
             travauxTitle: "Zona en obras",
-            travauxNotice: "Esta sección está actualmente en desarrollo o requiere privilegios elevados para ser totalmente funcional.",
+            travauxNotice: "Esta sección está actualmente en desarrollo.",
             travauxRecent: "Añadido reciente:",
-            travauxRecentTxt: "• Aparición del icono de configuración en el menú principal.",
+            travauxRecentTxt: "• Configuración global.",
             travauxFuture: "Evolución prevista:",
-            travauxFutureTxt: "• Este botón permitirá a los visitantes ajustar sus preferencias de lectura.",
+            travauxFutureTxt: "• Nuevas opciones.",
             settingsTitle: "Ajustes Generales",
             settingsLang: "Idioma:",
             settingsMedia: "Tema Visual:",
@@ -173,13 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsFontLg: "Grande",
             settingsSave: "Guardar ajustes",
             lastUpdateTitle: "✅ Última actualización",
-            lastUpdate1: "Integración del botón Configuración en la barra de navigation.",
-            lastUpdate2: "Modo desconectado: visualización de una ventana de alerta 'Zona en obras'.",
+            lastUpdate1: "El botón de configuración es accesible para todos.",
+            lastUpdate2: "El sitio ahora es accesible para todos (adaptado a móviles).",
             lastUpdate3: "Modo conectado: Menú de ajustes operativo con modificación del tamaño de la fuente.",
             nextUpdateTitle: "🚀 Próxima actualización",
-            nextUpdate1: "El botón Configuración tendrá una funcionalidad.",
-            nextUpdate2: "Adición inminente del programa del 12 de mayo.",
-            nextUpdate3: "Posible adición de una IA para ayudarte mejor en el sitio."
+            nextUpdate1: "Adición inminente del programa del 12 de mayo.",
+            nextUpdate2: "Posible adición de una IA para ayudarte mejor en el sitio.",
+            nextUpdate3: "Más opciones de personalización visual."
         }
     };
 
@@ -226,12 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- PARAMÈTRES INTERFACE ---
     if (paramBtn) {
         paramBtn.addEventListener('click', () => {
-            const isAdmin = sessionStorage.getItem('adminMode') === 'true';
-            if (isAdmin) {
-                if (modalMenuParam) modalMenuParam.classList.remove('hidden');
-            } else {
-                if (modalTravaux) modalTravaux.classList.remove('hidden');
-            }
+            // Désormais, tout le monde accède directement au vrai menu de réglages !
+            if (modalMenuParam) modalMenuParam.classList.remove('hidden');
         });
     }
 
@@ -329,20 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnSubmitPodcast) btnSubmitPodcast.innerText = t.btnSubmit;
         if (uploadStatus) uploadStatus.innerText = t.uploadStatus;
         if (btnLogout) btnLogout.innerText = t.btnLogout;
-
-        if (modalTravaux) {
-            const travauxH3 = modalTravaux.querySelector('h3');
-            if (travauxH3) travauxH3.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${t.travauxTitle}`;
-            const travauxP = modalTravaux.querySelector('.param-notice');
-            if (travauxP) travauxP.innerText = t.travauxNotice;
-            const travauxBoxes = modalTravaux.querySelectorAll('.param-box-update');
-            if (travauxBoxes.length >= 2) {
-                if(travauxBoxes[0].querySelector('h5')) travauxBoxes[0].querySelector('h5').innerText = t.travauxRecent;
-                if(travauxBoxes[0].querySelector('p')) travauxBoxes[0].querySelector('p').innerText = t.travauxRecentTxt;
-                if(travauxBoxes[1].querySelector('h5')) travauxBoxes[1].querySelector('h5').innerText = t.travauxFuture;
-                if(travauxBoxes[1].querySelector('p')) travauxBoxes[1].querySelector('p').innerText = t.travauxFutureTxt;
-            }
-        }
 
         if (modalMenuParam) {
             const settingsH3 = modalMenuParam.querySelector('h3');
@@ -495,13 +477,11 @@ document.addEventListener('DOMContentLoaded', () => {
         getAllRequest.onsuccess = () => {
             const list = getAllRequest.result;
 
-            // 1. On vide toutes les grilles pour éviter les doublons
             categoriesList.forEach(cat => {
                 const grid = document.getElementById(`grid-${cat}`);
                 if (grid) grid.innerHTML = "";
             });
 
-            // 2. Si la BDD globale est vide
             if (list.length === 0) {
                 categoriesList.forEach(cat => {
                     const grid = document.getElementById(`grid-${cat}`);
@@ -511,10 +491,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Tri par date décroissante
             list.sort((a, b) => b.id - a.id);
 
-            // 3. Distribution des cartes dans les bons sous-dossiers HTML
             list.forEach(pod => {
                 const podCategory = pod.category || "autres";
                 const targetGrid = document.getElementById(`grid-${podCategory}`);
@@ -536,7 +514,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // 4. Attribution des écouteurs d'événements aux boutons créés
             document.querySelectorAll('.btn-play').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = parseInt(btn.getAttribute('data-id'));
@@ -552,7 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            // 5. Mise à jour en temps réel des badges (0)
             rafraichirCompteurs();
         };
     }
@@ -669,7 +645,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === modalTravaux) modalTravaux.classList.add('hidden');
         if (e.target === modalMenuParam) modalMenuParam.classList.add('hidden');
     });
-// --- LOGIQUE DE CONNEXION AVEC EMPREINTE NUMÉRIQUE SECURISÉE ---
+
+    // --- LOGIQUE DE CONNEXION AVEC EMPREINTE NUMÉRIQUE SECURISÉE ---
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -678,18 +655,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!userField || !passField) return;
 
-            // .trim() supprime automatiquement les espaces accidentels au début et à la fin
             const usernameInput = userField.value.trim();
             const passwordInput = passField.value.trim();
 
-            // Fonction pour générer l'empreinte SHA-256
             const encoder = new TextEncoder();
             const data = encoder.encode(passwordInput);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             const passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-            // Comparaison stricte avec la casse exacte et la bonne empreinte
             if (usernameInput === "Radio 6" && passwordHash === "987804915f7a36e81ea33983df6a650243705fa2a740b748e83ad7ac9f32ad51") {
                 if (loginModal) loginModal.classList.add('hidden');
                 if (adminPanel) adminPanel.classList.remove('hidden');
@@ -705,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-// --- LOGOUT ---
+    // --- LOGOUT ---
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
             if (adminPanel) adminPanel.classList.add('hidden');
@@ -716,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyTranslations(currentLang);
         });
     }
-}); // <-- C'est cette accolade + parenthèse qui ferme le document.addEventListener du tout début !
+});
 
 // --- FERMETURE DES MODALES DE PARAMÈTRES (ACCÈS GLOBAL HTML) ---
 window.closeParamModal = function(modalId) {
