@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsFontLg: "Grande",
             settingsSave: "Guardar ajustes",
             lastUpdateTitle: "✅ Última actualización",
-            lastUpdate1: "Integración del botón Configuración en la barra de navegación.",
+            lastUpdate1: "Integración del botón Configuración en la barra de navigation.",
             lastUpdate2: "Modo desconectado: visualización de una ventana de alerta 'Zona en obras'.",
             lastUpdate3: "Modo conectado: Menú de ajustes operativo con modificación del tamaño de la fuente.",
             nextUpdateTitle: "🚀 Próxima actualización",
@@ -445,16 +445,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function formatTime(seconds) {
-        if (isNaN(seconds)) return "00:00";
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = Math.floor(seconds % 60);
-        const mStr = m < 10 ? "0" + m : m;
-        const sStr = s < 10 ? "0" + s : s;
-        return h > 0 ? `${h}:${mStr}:${sStr}` : `${mStr}:${sStr}`;
-    }
-
     // --- ENREGISTRER UN PODCAST DANS LA BASE INDEXEDDB ---
     if (addPodcastForm) {
         addPodcastForm.addEventListener('submit', (e) => {
@@ -531,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (targetGrid) {
                     const card = document.createElement('div');
-                    card.className = 'podcast-card'; // Correspond à ton style CSS d'origine
+                    card.className = 'podcast-card';
                     card.innerHTML = `
                         <div class="podcast-info">
                             <h3>${pod.title}</h3>
@@ -604,11 +594,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById(`grid-${cat}`);
             const badge = document.getElementById(`count-${cat}`);
             if (grid && badge) {
-                // Compte le nombre exact de cartes (.podcast-card) injectées dans cette grille
                 const count = grid.querySelectorAll('.podcast-card').length;
                 badge.textContent = `(${count})`;
             }
         });
+    }
+
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return "00:00";
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        const mStr = m < 10 ? "0" + m : m;
+        const sStr = s < 10 ? "0" + s : s;
+        return h > 0 ? `${h}:${mStr}:${sStr}` : `${mStr}:${sStr}`;
     }
 
     // --- LOGIQUE ONGLETS ET ACCÈS SESSIONS ---
@@ -671,7 +670,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === modalMenuParam) modalMenuParam.classList.add('hidden');
     });
 
-if (loginForm) {
+    // --- LOGIQUE DE CONNEXION AVEC EMPREINTE NUMÉRIQUE SECURISÉE ---
+    if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const userField = document.getElementById('username');
@@ -686,9 +686,11 @@ if (loginForm) {
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             const passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-            // L'identifiant reste le même, mais on compare l'empreinte calculée
-            // "679878..." correspond à l'empreinte sécurisée de ton mot de passe d'origine
-            if (userField.value === "Radio 6" && passwordHash === "6798782a9db30a845929668383cfb1b666795f5ab48386f56434850fa9194ec7") {
+            // 🚨 BOÎTE DE SECOURS VISUELLE : Tu pourras supprimer cette ligne alert() une fois connecté !
+            alert("Identifiant : [" + userField.value + "]\nEmpreinte générée : " + passwordHash);
+
+            // "d42f50..." correspond exactement à l'empreinte de "ArcisseCaumont14"
+            if (userField.value === "Radio 6" && passwordHash === "d42f50bfda51909f19ef669389be8411bc4c8034a74288ff3f837943d04fc487") {
                 if (loginModal) loginModal.classList.add('hidden');
                 if (adminPanel) adminPanel.classList.remove('hidden');
                 if (btnLoginOpen) btnLoginOpen.classList.add('hidden');
@@ -702,6 +704,8 @@ if (loginForm) {
             }
         });
     }
+
+    // --- LOGOUT ---
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
             if (adminPanel) adminPanel.classList.add('hidden');
@@ -713,6 +717,7 @@ if (loginForm) {
         });
     }
 });
+
 // --- FERMETURE DES MODALES DE PARAMÈTRES (ACCÈS GLOBAL HTML) ---
 window.closeParamModal = function(modalId) {
     const targetModal = document.getElementById(modalId);
