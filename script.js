@@ -702,17 +702,6 @@ if (loginForm) {
             }
         });
     }
-    if (btnLogout) {
-        btnLogout.addEventListener('click', () => {
-            if (adminPanel) adminPanel.classList.add('hidden');
-            if (btnLoginOpen) btnLoginOpen.classList.remove('hidden');
-            document.body.classList.remove('admin-mode');
-            sessionStorage.setItem('adminMode', 'false');
-            removeIALink();
-            applyTranslations(currentLang);
-        });
-    }
-});
 
 // --- FERMETURE DES MODALES DE PARAMÈTRES (ACCÈS GLOBAL HTML) ---
 window.closeParamModal = function(modalId) {
